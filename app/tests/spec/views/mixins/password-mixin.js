@@ -30,13 +30,13 @@ define(function (require, exports, module) {
   );
 
   describe('views/mixins/password-mixin', function () {
-    var view;
-    var relier;
     var metrics;
+    var relier;
+    var view;
 
     beforeEach(function () {
-      relier = new Relier();
       metrics = new Metrics();
+      relier = new Relier();
 
       view = new PasswordView({
         metrics: metrics,
@@ -204,6 +204,34 @@ define(function (require, exports, module) {
         view.onPasswordKeyUp();
         assert.equal(view.$('.input-help').css('opacity'), '0');
         assert.equal(view.$('.input-help-forgot-pw').css('opacity'), '1');
+      });
+    });
+
+    describe('hideVisiblePasswordElValues', function () {
+      it('sets all password fields to type `password`', function () {
+        var $passwordEls = view.$('.password');
+        $passwordEls.each(function (i, el) {
+          el.type = 'text';
+        });
+        view.hideVisiblePasswordElValues();
+        $passwordEls.each(function (i, el) {
+          assert.equal(el.type, 'password', 'password fields were not set properly');
+        });
+        assert.ok($passwordEls.length > 0);
+      });
+    });
+
+    describe('`submit` event', function () {
+      it('hides all visible password values', function () {
+        var $passwordEls = view.$('.password');
+        $passwordEls.each(function (i, el) {
+          el.type = 'text';
+        });
+        view.trigger('submit');
+        $passwordEls.each(function (i, el) {
+          assert.equal(el.type, 'password', 'password fields were not set properly');
+        });
+        assert.ok($passwordEls.length > 0);
       });
     });
   });

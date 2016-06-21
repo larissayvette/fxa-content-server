@@ -15,6 +15,13 @@ define(function (require, exports, module) {
       'keyup input.password': 'onPasswordKeyUp'
     },
 
+    initialize: function () {
+      // the initialize event from the view is listened for instead of
+      // from the DOM so that the view's validation logic is run before
+      // hiding the elements.
+      this.on('submit', this.hideVisiblePasswordElValues.bind(this));
+    },
+
     afterVisible: function () {
       if (this.isInExperiment && this.isInExperiment('showPassword')) {
         this.notifier.trigger('showPassword.triggered');
@@ -69,6 +76,21 @@ define(function (require, exports, module) {
         // IE8 blows up when changing the type of the input field. Other
         // browsers might too. Ignore the error.
       }
+    },
+
+    /**
+     * Set all password fields to type=password so that
+     * the browser does not save the password as a text field
+     * in form auto-fill.
+     */
+    hideVisiblePasswordElValues: function () {
+      var self = this;
+      self.$el.find('.password[type=text]').each(function (i, el) {
+        // only set the type, do not remove the attributes or else
+        // the Firefox password manager does not offer to save i
+        // the password.
+        el.type = 'password';
+      });
     },
 
     onPasswordKeyUp: function () {

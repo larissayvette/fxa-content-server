@@ -164,24 +164,18 @@ define(function (require, exports, module) {
     });
 
     describe('validateAndSubmit', function () {
+      it('triggers the `submit` message', function (done) {
+        view.on('submit', done);
+
+        view.formIsValid = true;
+        view.enableSubmitIfValid();
+        view.validateAndSubmit();
+      });
+
       it('submits form if isValid returns true', function () {
         view.formIsValid = true;
         view.enableSubmitIfValid();
         return testFormSubmitted();
-      });
-
-      it('sets all password fields to type `password`', function () {
-        view.$('.password').each(function (i, el) {
-          el.type = 'text';
-        });
-        view.formIsValid = true;
-        view.enableSubmitIfValid();
-        return view.validateAndSubmit()
-                  .then(function () {
-                    self.$('.password').each(function (i, el) {
-                      assert.equal(el.type, 'password', 'password fields were not set properly');
-                    });
-                  });
       });
 
       it('shows validation errors if isValid returns false', function () {
@@ -200,7 +194,6 @@ define(function (require, exports, module) {
                   }, function (err) {
                     assert.equal(err.message, 'submit already in progress');
                   });
-
       });
 
       it('does not submit if form is disabled', function () {
