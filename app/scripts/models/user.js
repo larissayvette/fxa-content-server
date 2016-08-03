@@ -352,6 +352,7 @@ define(function (require, exports, module) {
      * @param {string} password - the user's password
      * @param {object} relier - relier being signed in to
      * @param {object} [options] - options
+     * @param {string} [options.unblockCode] - unblock code
      * @returns {promise} - resolves when complete
      */
     signInAccount: function (account, password, relier, options) {
@@ -626,6 +627,17 @@ define(function (require, exports, module) {
           }
           return exists;
         });
+    },
+
+    /**
+     * Report/reject the unblockCode for the given account
+     *
+     * @param {Object} account
+     * @param {String} unblockCode
+     * @returns {Promise}
+     */
+    rejectAccountUnblockCode(account, unblockCode) {
+      return account.rejectUnblockCode(unblockCode);
     }
   });
 
