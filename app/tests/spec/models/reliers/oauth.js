@@ -12,7 +12,6 @@ define(function (require, exports, module) {
   var OAuthErrors = require('lib/oauth-errors');
   var OAuthRelier = require('models/reliers/oauth');
   var p = require('lib/promise');
-  var RelierKeys = require('lib/relier-keys');
   var Session = require('lib/session');
   var sinon = require('sinon');
   var TestHelpers = require('../../../lib/helpers');
@@ -465,21 +464,6 @@ define(function (require, exports, module) {
         assert.isFalse(relier.wantsKeys());
         relier.set('keys', true);
         assert.isTrue(relier.wantsKeys());
-      });
-    });
-
-    describe('deriveRelierKeys', function () {
-      it('derives `kAr` and `kBr` account master keys', function () {
-        sinon.stub(RelierKeys, 'deriveRelierKeys', function () {
-          return p({ kAr: 'kAr', kBr: 'kBr' });
-        });
-        var mockKeys = { kA: 'kA', kB: 'kB' };
-        return relier.deriveRelierKeys(mockKeys, 'uid')
-          .then(function (keys) {
-            assert.isTrue(RelierKeys.deriveRelierKeys.calledWith(mockKeys, 'uid'));
-            assert.equal(keys.kAr, 'kAr');
-            assert.equal(keys.kBr, 'kBr');
-          });
       });
     });
 

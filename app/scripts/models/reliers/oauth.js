@@ -13,7 +13,6 @@ define(function (require, exports, module) {
   var Constants = require('lib/constants');
   var OAuthErrors = require('lib/oauth-errors');
   var Relier = require('models/reliers/relier');
-  var RelierKeys = require('lib/relier-keys');
   var Transform = require('lib/transform');
   var Validate = require('lib/validate');
   var Vat = require('lib/vat');
@@ -158,10 +157,6 @@ define(function (require, exports, module) {
         return true;
       }
       return Relier.prototype.wantsKeys.call(this);
-    },
-
-    deriveRelierKeys: function (keys, uid) {
-      return RelierKeys.deriveRelierKeys(keys, uid, this.get('clientId'));
     },
 
     _isVerificationFlow: function () {
