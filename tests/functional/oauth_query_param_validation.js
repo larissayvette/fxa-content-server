@@ -260,14 +260,6 @@ define([
       });
     },
 
-    'valid redirect_uri (urn)': function () {
-      return openSignUpExpect200(this, {
-        client_id: TRUSTED_CLIENT_ID,
-        redirect_uri: 'urn:ietf:wg:oauth:2.0:fx:webchannel',
-        scope: TRUSTED_SCOPE
-      });
-    },
-
     'invalid redirect_uri (url)': function () {
       return openSignUpExpect400(this, {
         client_id: TRUSTED_CLIENT_ID,
@@ -281,7 +273,7 @@ define([
     'invalid redirect_uri (urn)': function () {
       return openSignUpExpect400(this, {
         client_id: TRUSTED_CLIENT_ID,
-        redirect_uri: 'urn::asdf',
+        redirect_uri: 'urn:ietf:wg:oauth:2.0:fx:webchannel',
         scope: TRUSTED_SCOPE
       })
       .then(testErrorInclude('invalid'))

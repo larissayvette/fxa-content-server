@@ -10,9 +10,6 @@ define([
   './functional/oauth_sign_up',
   './functional/oauth_sign_up_verification_redirect',
   './functional/oauth_reset_password',
-  './functional/oauth_webchannel',
-  './functional/oauth_webchannel_force_auth',
-  './functional/oauth_webchannel_keys',
   './functional/oauth_preverified_sign_up',
   './functional/oauth_force_auth',
   './functional/oauth_permissions'

@@ -115,66 +115,55 @@ define(function (require, exports, module) {
       return p.reject(new Error('subclasses must override sendOAuthResultToRelier'));
     },
 
-    finishOAuthSignInFlow: function (account, additionalResultData) {
-      additionalResultData = additionalResultData || {};
-      additionalResultData.action = Constants.OAUTH_ACTION_SIGNIN;
-      return this.finishOAuthFlow(account, additionalResultData);
+    finishOAuthSignInFlow: function (account) {
+      return this.finishOAuthFlow(account, { action: Constants.OAUTH_ACTION_SIGNIN });
     },
 
-    finishOAuthSignUpFlow: function (account, additionalResultData) {
-      additionalResultData = additionalResultData || {};
-      additionalResultData.action = Constants.OAUTH_ACTION_SIGNUP;
-      return this.finishOAuthFlow(account, additionalResultData);
+    finishOAuthSignUpFlow: function (account) {
+      return this.finishOAuthFlow(account, { action: Constants.OAUTH_ACTION_SIGNUP });
     },
 
-    finishOAuthFlow: function (account, additionalResultData) {
-      var self = this;
-      self.session.clear('oauth');
-      return self.getOAuthResult(account)
-        .then(function (result) {
-          if (additionalResultData) {
-            result = _.extend(result, additionalResultData);
-          }
-          return self.sendOAuthResultToRelier(result);
+    finishOAuthFlow: function (account, additionalResultData = {}) {
+      this.session.clear('oauth');
+      return this.getOAuthResult(account)
+        .then((result) => {
+          result = _.extend(result, additionalResultData);
+          return this.sendOAuthResultToRelier(result);
         });
     },
 
     persistVerificationData: function (account) {
-      var self = this;
-      return p().then(function () {
-        var relier = self.relier;
-        self.session.set('oauth', {
+      return p().then(() => {
+        var relier = this.relier;
+        this.session.set('oauth', {
           access_type: relier.get('access_type'), //eslint-disable-line camelcase
           action: relier.get('action'),
           client_id: relier.get('clientId'), //eslint-disable-line camelcase
           keys: relier.get('keys'),
           scope: relier.get('scope'),
-          state: relier.get('state'),
-          webChannelId: self.get('webChannelId')
+          state: relier.get('state')
         });
 
-        return proto.persistVerificationData.call(self, account);
+        return proto.persistVerificationData.call(this, account);
       });
     },
 
-    afterForceAuth: function (account, additionalResultData) {
-      var self = this;
-      return self.finishOAuthSignInFlow(account, additionalResultData)
-        .then(function () {
-          return proto.afterForceAuth.call(self, account);
+    afterForceAuth: function (account) {
+      return this.finishOAuthSignInFlow(account)
+        .then(() => {
+          return proto.afterForceAuth.call(this, account);
         });
     },
 
-    afterSignIn: function (account, additionalResultData) {
-      var self = this;
-      return self.finishOAuthSignInFlow(account, additionalResultData)
-        .then(function () {
-          return proto.afterSignIn.call(self, account);
+    afterSignIn: function (account) {
+      return this.finishOAuthSignInFlow(account)
+        .then(() => {
+          return proto.afterSignIn.call(this, account);
         });
     },
 
-    afterSignInConfirmationPoll (account, additionalResultData) {
-      return this.finishOAuthSignInFlow(account, additionalResultData)
+    afterSignInConfirmationPoll (account) {
+      return this.finishOAuthSignInFlow(account)
         .then(() => {
           return proto.afterSignInConfirmationPoll.call(this, account);
         });
