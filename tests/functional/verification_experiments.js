@@ -16,6 +16,7 @@ define([
 
   var click = FunctionalHelpers.click;
   var testElementExists = FunctionalHelpers.testElementExists;
+  var type = FunctionalHelpers.type;
 
   registerSuite({
     name: 'verification_experiments - mailcheck',
@@ -29,15 +30,14 @@ define([
     },
 
     'treatment works': function () {
-      var BAD_EMAIL = 'something@gnail.com';
-      var CORRECTED_EMAIL = 'something@gmail.com';
+      const BAD_EMAIL = 'something@gnail.com';
+      const CORRECTED_EMAIL = 'something@gmail.com';
 
       return this.remote
         .setFindTimeout(intern.config.pageLoadTimeout)
         .get(require.toUrl(EXP_MAILCHECK_URL + EXP_TREATMENT))
 
-        .findByCssSelector('.email')
-          .type(BAD_EMAIL)
+        .then(type('.email', BAD_EMAIL))
           .click()
         .end()
 
@@ -54,15 +54,14 @@ define([
     },
 
     'control works': function () {
-      var self = this;
-      var BAD_EMAIL = 'something@gnail.com';
+      const self = this;
+      const BAD_EMAIL = 'something@gnail.com';
 
       return this.remote
         .setFindTimeout(intern.config.pageLoadTimeout)
         .get(require.toUrl(EXP_MAILCHECK_URL + EXP_CONTROL))
 
-        .findByCssSelector('.email')
-          .type(BAD_EMAIL)
+        .then(type('.email', BAD_EMAIL))
           .click()
         .end()
 
@@ -89,14 +88,14 @@ define([
         .get(require.toUrl(EXP_SHOWPASSWORD_URL + EXP_TREATMENT))
         .then(FunctionalHelpers.pollUntil(function () {
           /* global $ */
-          return $('.show-password-label').is(':hidden') === true ? true : null;
+          return $('.show-password-label').length === 0 ? true : null;
         }, [], 10000))
 
         .then(click('.sign-in'))
         .then(testElementExists('#fxa-signin-header'))
 
         .then(FunctionalHelpers.pollUntil(function () {
-          return $('.show-password-label').is(':hidden') === true ? true : null;
+          return $('.show-password-label').length === 0 ? true : null;
         }, [], 10000));
 
     },
@@ -105,13 +104,16 @@ define([
       return this.remote
         .setFindTimeout(intern.config.pageLoadTimeout)
         .get(require.toUrl(EXP_SHOWPASSWORD_URL + EXP_CONTROL))
+        .then(type('.password', 'asdf'))
+        .end()
         .then(FunctionalHelpers.pollUntil(function () {
           return $('.show-password-label').is(':hidden') === false ? true : null;
         }, [], 10000))
 
         .then(click('.sign-in'))
         .then(testElementExists('#fxa-signin-header'))
-
+        .then(type('.password', 'asdf'))
+        .end()
         .then(FunctionalHelpers.pollUntil(function () {
           return $('.show-password-label').is(':hidden') === false ? true : null;
         }, [], 10000));

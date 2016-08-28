@@ -8,10 +8,16 @@ define(function (require, exports, module) {
   'use strict';
 
   const $ = require('jquery');
+  const BaseView = require('views/base');
   const Constants = require('lib/constants');
+  const t = BaseView.t;
+
+  const SHOW_MESSAGE = t('Show');
+  const SHOW_PASSWORD_LABEL_SELECTOR = '.show-password-label';
 
   module.exports = {
     events: {
+      'focus input.password': 'onPasswordFocus',
       'keyup input.password': 'onPasswordKeyUp',
       'mousedown .show-password-label': 'onShowPasswordMouseDown',
       'touchstart .show-password-label': 'onShowPasswordMouseDown'
@@ -30,9 +36,13 @@ define(function (require, exports, module) {
         this.notifier.trigger('showPassword.triggered');
 
         if (this.isInExperimentGroup('showPassword', 'treatment')) {
-          this.$el.find('.show-password-label').hide();
+          this.$el.find(SHOW_PASSWORD_LABEL_SELECTOR).hide();
         }
       }
+    },
+
+    onPasswordFocus (event) {
+      this.handleShowPasswordLabel(event.target);
     },
 
     onShowPasswordMouseDown (event) {
@@ -107,7 +117,8 @@ define(function (require, exports, module) {
       });
     },
 
-    onPasswordKeyUp () {
+    onPasswordKeyUp (event) {
+      this.updateShowPasswordLabelVisibility($(event.target));
       var values = [];
 
       // Values contains all password classes length
@@ -121,6 +132,31 @@ define(function (require, exports, module) {
         this.showPasswordHelper();
       } else {
         this.hidePasswordHelper();
+      }
+    },
+
+    handleShowPasswordLabel (el) {
+      const $passwordEl = $(el);
+      if ($passwordEl.siblings(SHOW_PASSWORD_LABEL_SELECTOR).length === 0) {
+        // if no label exists, create one
+        this.createShowPasswordLabel($passwordEl);
+      }
+      // update the visibility of the label
+      this.updateShowPasswordLabelVisibility($passwordEl);
+    },
+
+    createShowPasswordLabel ($passwordEl) {
+      const $showPasswordLabel = $('<label for="show-password">' + SHOW_MESSAGE + '</label>');
+      $showPasswordLabel.addClass('show-password-label hidden');
+      $showPasswordLabel.insertAfter($passwordEl);
+    },
+
+    updateShowPasswordLabelVisibility ($passwordEl) {
+      const $showPasswordLabel = $passwordEl.siblings(SHOW_PASSWORD_LABEL_SELECTOR);
+      if ($passwordEl.val().length !== 0) {
+        $showPasswordLabel.removeClass('hidden');
+      } else {
+        $showPasswordLabel.addClass('hidden');
       }
     },
 
