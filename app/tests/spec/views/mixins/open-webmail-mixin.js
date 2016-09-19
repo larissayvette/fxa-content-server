@@ -118,6 +118,21 @@ define(function (require, exports, module) {
 
     describe('click on `open-webmail` button', function () {
       beforeEach(function () {
+        view = new ConfirmView({
+          broker: broker
+        });
+
+        return view.render();
+      });
+
+      it('translates the button', () => {
+        assert.equal(
+          view.$('#open-webmail').text(), TRANSLATED_BUTTON_TEXT);
+      });
+    });
+
+    describe('click on `open-webmail` button', function () {
+      beforeEach(function () {
         sinon.spy(view, 'logViewEvent');
 
         return view.render()
