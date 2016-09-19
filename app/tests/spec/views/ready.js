@@ -100,11 +100,9 @@ define(function (require, exports, module) {
       // regression test for #1216
       it('does not show service name if service is defined but serviceName is not', function () {
         createView(VerificationReasons.SIGN_UP);
-        view.context = function () {
-          return {
-            service: 'sync'
-          };
-        };
+        sinon.stub(view, 'updateContext', (context) => {
+          context.set('service', 'sync');
+        });
 
         return view.render()
           .then(function () {
@@ -171,16 +169,16 @@ define(function (require, exports, module) {
         var redirectUri = 'https://find.firefox.com';
         relier.set('redirectUri', redirectUri);
         relier.set('serviceName', serviceName);
-        assert.isFalse(view.context().shouldShowProceedButton);
+        assert.isFalse(view.getContext(true).shouldShowProceedButton);
 
         relier.set('verificationRedirect', 'always');
-        assert.isTrue(view.context().shouldShowProceedButton);
+        assert.isTrue(view.getContext(true).shouldShowProceedButton);
 
         relier.set('redirectUri', 'urn:ietf:wg:oauth:2.0:fx:webchannel');
-        assert.isFalse(view.context().shouldShowProceedButton);
+        assert.isFalse(view.getContext(true).shouldShowProceedButton);
 
         relier.set('redirectUri', null);
-        assert.isFalse(view.context().shouldShowProceedButton);
+        assert.isFalse(view.getContext(true).shouldShowProceedButton);
       });
 
       it('shows the `proceed` button for verification_redirect', function () {

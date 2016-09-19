@@ -148,7 +148,7 @@ define(function (require, exports, module) {
             this.model.get('bouncedEmail'), prefillEmail, prefillPassword);
     },
 
-    context: function () {
+    updateContext (context) {
       var autofocusEl = this._selectAutoFocusEl();
       var forceEmail = this.model.get('forceEmail');
       var prefillEmail = this.getPrefillEmail();
@@ -157,7 +157,7 @@ define(function (require, exports, module) {
       var relier = this.relier;
       var isSync = relier.isSync();
 
-      var context = {
+      context.set({
         chooseWhatToSyncCheckbox: this.broker.hasCapability('chooseWhatToSyncCheckbox'),
         email: prefillEmail,
         error: this.error,
@@ -174,9 +174,7 @@ define(function (require, exports, module) {
         shouldFocusPassword: autofocusEl === 'password',
         showSyncSuggestion: this.isSyncSuggestionEnabled(),
         signinUri: this.broker.transformLink('/signin')
-      };
-
-      return context;
+      });
     },
 
     beforeDestroy: function () {

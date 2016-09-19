@@ -60,8 +60,8 @@ define(function (require, exports, module) {
       });
     },
 
-    context: function () {
-      return {
+    updateContext (context) {
+      context.set({
         clients: this._formatAccessTime(this._attachedClients.toJSON()),
         clientsPanelManageString: this._getManageString(),
         clientsPanelTitle: this._getPanelTitle(),
@@ -73,7 +73,7 @@ define(function (require, exports, module) {
         linkLinux: FIREFOX_DOWNLOAD_LINK,
         linkOSX: FIREFOX_DOWNLOAD_LINK,
         linkWindows: FIREFOX_DOWNLOAD_LINK
-      };
+      });
     },
 
     events: {

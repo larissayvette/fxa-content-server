@@ -62,20 +62,20 @@ define(function (require, exports, module) {
       this.notifier.triggerRemote(Notifier.COMPLETE_RESET_PASSWORD_TAB_OPEN);
     },
 
-    context: function () {
+    updateContext (context) {
       var verificationInfo = this._verificationInfo;
       var doesLinkValidate = verificationInfo.isValid();
       var isLinkExpired = verificationInfo.isExpired();
       var showSyncWarning = this.relier.get('resetPasswordConfirm');
 
       // damaged and expired links have special messages.
-      return {
+      context.set({
         email: verificationInfo.get('email'),
         isLinkDamaged: ! doesLinkValidate,
         isLinkExpired: isLinkExpired,
         isLinkValid: doesLinkValidate && ! isLinkExpired,
         showSyncWarning: showSyncWarning
-      };
+      });
     },
 
     isValidEnd: function () {

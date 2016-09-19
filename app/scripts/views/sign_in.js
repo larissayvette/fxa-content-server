@@ -72,12 +72,12 @@ define(function (require, exports, module) {
         suggestedAccount.get('email') : this.getPrefillEmail();
     },
 
-    context: function () {
+    updateContext (context) {
       var suggestedAccount = this.getAccount();
       var hasSuggestedAccount = suggestedAccount.get('email');
       var email = this.getEmail();
 
-      return {
+      context.set({
         chooserAskForPassword: this._suggestedAccountAskPassword(suggestedAccount),
         email: email,
         error: this.error,
@@ -85,7 +85,7 @@ define(function (require, exports, module) {
         password: this._formPrefill.get('password'),
         serviceName: this.relier.get('serviceName'),
         suggestedAccount: hasSuggestedAccount
-      };
+      });
     },
 
     events: {

@@ -41,12 +41,12 @@ define(function (require, exports, module) {
       return this._account;
     },
 
-    context: function () {
+    updateContext (context) {
       var email = this.getAccount().get('email');
       var isSignIn = this.isSignIn();
       var isSignUp = this.isSignUp();
 
-      return {
+      context.set({
         // Back button is only available for signin for now. We haven't fully
         // figured out whether re-signing up a user and sending a new
         // email/sessionToken to the browser will cause problems. I don't think
@@ -56,7 +56,7 @@ define(function (require, exports, module) {
         email: email,
         isSignIn: isSignIn,
         isSignUp: isSignUp
-      };
+      });
     },
 
     _bouncedEmailSignup: function () {

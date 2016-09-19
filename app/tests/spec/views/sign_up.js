@@ -1169,7 +1169,6 @@ define(function (require, exports, module) {
 
         it('checkbox is not visible if no `chooseWhatToSyncCheckbox` capability', function () {
           broker.setCapability('chooseWhatToSyncCheckbox', false);
-          view.context();
           return setupCustomizeSyncTest('sync', true)
             .then(function () {
               assert.isFalse(view.$el.find('#customize-sync').length > 0);

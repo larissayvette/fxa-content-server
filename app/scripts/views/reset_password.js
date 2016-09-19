@@ -27,10 +27,8 @@ define(function (require, exports, module) {
       this._formPrefill = options.formPrefill;
     },
 
-    context: function () {
-      return {
-        forceEmail: this.model.get('forceEmail')
-      };
+    updateContext (context) {
+      context.set('forceEmail', this.model.get('forceEmail'));
     },
 
     beforeRender: function () {

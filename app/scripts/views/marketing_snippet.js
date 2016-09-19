@@ -28,12 +28,8 @@ define(function (require, exports, module) {
       this._service = options.service;
     },
 
-    context: function () {
-      var shouldShowMarketing = this._shouldShowSignUpMarketing();
-
-      return {
-        showSignUpMarketing: shouldShowMarketing
-      };
+    updateContext (context) {
+      context.set('showSignUpMarketing', this._shouldShowSignUpMarketing());
     },
 
     _shouldShowSignUpMarketing: function () {

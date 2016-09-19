@@ -38,10 +38,10 @@ define(function (require, exports, module) {
       }
     },
 
-    context: function () {
+    updateContext (context) {
       var account = this.getAccount();
 
-      return {
+      context.set({
         email: account.get('email'),
         hasBookmarkSupport: this._isEngineSupported('bookmarks'),
         hasDesktopAddonSupport: this._isEngineSupported('desktop-addons'),
@@ -49,7 +49,7 @@ define(function (require, exports, module) {
         hasHistorySupport: this._isEngineSupported('history'),
         hasPasswordSupport: this._isEngineSupported('passwords'),
         hasTabSupport: this._isEngineSupported('tabs')
-      };
+      });
     },
 
     submit: function () {

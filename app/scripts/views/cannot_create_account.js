@@ -14,10 +14,10 @@ define(function (require, exports, module) {
     template: CannotCreateAccountTemplate,
     className: 'cannot-create-account',
 
-    context: function () {
-      return {
+    updateContext (context) {
+      context.set({
         isSync: this.relier.isSync()
-      };
+      });
     }
 
   });

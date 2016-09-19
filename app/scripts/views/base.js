@@ -316,21 +316,39 @@ define(function (require, exports, module) {
       return title;
     },
 
-    getContext: function () {
+    /**
+     * Get the context that is used to render the
+     * template and translate strings.
+     *
+     * @param {Boolean} [ignoreCache] - defaults to false.
+     * @returns {Object}
+     */
+    getContext: function (ignoreCache = false) {
       // use cached context, if available. This prevents the context()
       // function from being called multiple times per render.
-      if (! this._context) {
-        this._context = this.context() || {};
+      if (! this._context || ignoreCache) {
+        this._context = new Backbone.Model({
+          // `t` is a mustache helper to translate strings.
+          t: this.translateInTemplate.bind(this)
+        });
+        this.updateContext(this._context);
       }
-      var ctx = this._context;
 
-      // `t` is a mustache helper to translate strings.
-      ctx.t = this.translateInTemplate.bind(this);
-
-      return ctx;
+      return this._context.toJSON();
     },
 
-    context: function () {
+    /**
+     * Update the context that is used to render the
+     * template and translate strings. Safe to override
+     * directly in mixins.
+     *
+     * Set values directly on the model, e.g.,:
+     *
+     * context.set('isBlurbVisible', true);
+     *
+     * @param {Backbone.Model} context
+     */
+    updateContext: function (context) {
       // Implement in subclasses
     },
 

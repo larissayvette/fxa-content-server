@@ -63,21 +63,21 @@ define(function (require, exports, module) {
       this._language = options.language;
     },
 
-    context: function () {
+    updateContext (context) {
       var shouldShowMarketing = this._shouldShowSignUpMarketing();
       var isIos = this._isIos();
       var isAndroid = this._isAndroid();
       var playStoreImage = this._storeImage(PLAY_STORE_BUTTON, FORMAT_PNG);
       var appStoreImage = this._storeImage(APP_STORE_BUTTON, FORMAT_SVG);
 
-      return {
+      context.set({
         appStoreImage: appStoreImage,
         isAndroid: isAndroid,
         isIos: isIos,
         isOther: ! isIos && ! isAndroid,
         playStoreImage: playStoreImage,
         showSignUpMarketing: shouldShowMarketing
-      };
+      });
     },
 
     _isIos: function () {

@@ -108,14 +108,14 @@ define(function (require, exports, module) {
       });
     },
 
-    context: function () {
+    updateContext (context) {
       var account = this.getSignedInAccount();
 
-      return {
+      context.set({
         displayName: account.get('displayName'),
         showSignOut: ! account.isFromSync(),
         userEmail: account.get('email')
-      };
+      });
     },
 
     events: {

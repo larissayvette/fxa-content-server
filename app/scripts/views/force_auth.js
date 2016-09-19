@@ -147,12 +147,12 @@ define(function (require, exports, module) {
       });
     },
 
-    context: function () {
-      return {
+    updateContext (context) {
+      context.set({
         email: this.relier.get('email'),
         fatalError: this.model.get('error'),
         password: this._formPrefill.get('password')
-      };
+      });
     },
 
     events: _.extend({}, SignInView.prototype.events, {

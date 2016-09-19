@@ -45,11 +45,9 @@ define(function (require, exports, module) {
       }
     },
 
-    context: function () {
+    updateContext (context) {
       var account = this.getSignedInAccount();
-      return {
-        'hasProfileImage': account.has('profileImageUrl')
-      };
+      context.set('hasProfileImage', account.has('profileImageUrl'));
     },
 
     afterVisible: function () {

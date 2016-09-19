@@ -47,7 +47,6 @@ define(function (require, exports, module) {
     },
 
     addUserInfo: function (providerLink, email) {
-
       if (this.getWebmailType(email) === 'gmail'){
         providerLink = providerLink.concat(encodeURIComponent(email));
       }
@@ -61,33 +60,19 @@ define(function (require, exports, module) {
       });
     },
 
-    /**
-     * Monkey patch BaseView.prototype.getContext to return a context
-     * @method getContext
-     * @returns {Object}
-     */
-    getContext: function () {
-      const context = BaseView.prototype.getContext.call(this);
-      const email = context.email;
+    updateContext: function (context) {
+      const email = this.getAccount().get('email');
       const isOpenWebmailButtonVisible = this.isOpenWebmailButtonVisible(email);
 
-      context.isOpenWebmailButtonVisible = isOpenWebmailButtonVisible;
+      context.set('isOpenWebmailButtonVisible', isOpenWebmailButtonVisible);
 
       if (email && isOpenWebmailButtonVisible) {
-        _.extend(context, {
-          // function.bind is used to avoid infinite recursion.
-          // getWebmailButtonText calls this.translate which calls
-          // this.context, which will call this.getContext since context is
-          // not yet set. Mustache will call the helper function to get the
-          // button text, context will be set, and getContext will not be called
-          // again. We should fix our l10n.
-          webmailButtonText: this.getWebmailButtonText.bind(this, email),
+        context.set({
+          webmailButtonText: this.getWebmailButtonText(email),
           webmailLink: this.getWebmailLink(email),
           webmailType: this.getWebmailType(email)
         });
       }
-
-      return context;
     },
 
     getWebmailLink: function (email) {

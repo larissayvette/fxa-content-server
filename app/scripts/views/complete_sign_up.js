@@ -157,15 +157,15 @@ define(function (require, exports, module) {
           });
     },
 
-    context: function () {
+    updateContext (context) {
       var verificationInfo = this._verificationInfo;
-      return {
+      context.set({
         canResend: this._canResend(),
         error: this.model.get('error'),
         // If the link is invalid, print a special error message.
         isLinkDamaged: ! verificationInfo.isValid(),
         isLinkExpired: verificationInfo.isExpired()
-      };
+      });
     },
 
     _canResend: function () {

@@ -20,13 +20,13 @@ define(function (require, exports, module) {
     className: 'gravatar-permissions',
     viewName: 'settings.gravatar-permissions',
 
-    context: function () {
+    updateContext (context) {
       var account = this.getSignedInAccount();
       var serviceName = this.translator.get('Gravatar');
-      return {
+      context.set({
         email: account.get('email'),
         serviceName: serviceName
-      };
+      });
     },
 
     beforeRender: function () {

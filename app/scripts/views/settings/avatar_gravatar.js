@@ -32,10 +32,8 @@ define(function (require, exports, module) {
     className: 'avatar-gravatar',
     viewName: 'settings.avatar.gravatar',
 
-    context: function () {
-      return {
-        gravatar: this.gravatar
-      };
+    updateContext (context) {
+      context.set('gravatar', this.gravatar);
     },
 
     afterRender: function () {

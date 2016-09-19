@@ -24,16 +24,20 @@ define(function (require, exports, module) {
   );
 
   describe('views/mixins/open-webmail-mixin', function () {
+    let account;
     let broker;
     let view;
 
     beforeEach(function () {
+      account = new Account();
       broker = new Broker();
       broker.setCapability('openWebmailButtonVisible', true);
 
       view = new ConfirmView({
         broker: broker
       });
+
+      sinon.stub(view, 'getAccount', () => account);
     });
 
     afterEach(function () {
@@ -89,6 +93,8 @@ define(function (require, exports, module) {
       const TRANSLATED_BUTTON_TEXT = 'Ouvrir Gmail';
 
       beforeEach(() => {
+        account.set('email', EMAIL);
+
         view.translator = {
           get: (untranslatedText) => {
             if (untranslatedText === 'Open Gmail') {
@@ -98,14 +104,6 @@ define(function (require, exports, module) {
             return untranslatedText;
           }
         };
-
-        sinon.stub(view, 'getAccount', () => {
-          return new Account({ email: EMAIL });
-        });
-
-        sinon.stub(view, 'context', () => {
-          return { email: EMAIL };
-        });
 
         return view.render();
       });
@@ -118,9 +116,7 @@ define(function (require, exports, module) {
 
     describe('click on `open-webmail` button', function () {
       beforeEach(function () {
-        view = new ConfirmView({
-          broker: broker
-        });
+        account.set('email', 'testuser@gmail.com');
 
         return view.render();
       });

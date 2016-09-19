@@ -72,8 +72,8 @@ define(function (require, exports, module) {
       this._templateInfo = TEMPLATE_INFO[this.keyOfVerificationReason(options.type)];
     },
 
-    context: function () {
-      return {
+    updateContext (context) {
+      context.set({
         headerId: this._getHeaderId(),
         headerTitle: this._getHeaderTitle(),
         isSync: this.relier.isSync(),
@@ -83,7 +83,7 @@ define(function (require, exports, module) {
         serviceName: this.relier.get('serviceName'),
         shouldShowProceedButton: this._shouldShowProceedButton(),
         shouldShowSyncPreferencesButton: this._shouldShowSyncPreferencesButton()
-      };
+      });
     },
 
     _getHeaderId: function () {

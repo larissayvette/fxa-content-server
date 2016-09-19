@@ -79,13 +79,13 @@ define(function (require, exports, module) {
         });
     },
 
-    context: function () {
+    updateContext (context) {
       var self = this;
       var emailPrefs = this.getMarketingEmailPrefs();
       var isOptedIn = emailPrefs.isOptedIn(NEWSLETTER_ID);
       self.logViewEvent('newsletter.optin.' + String(isOptedIn));
 
-      return {
+      context.set({
         error: self._error,
         isBasketReady: !! self._isBasketReady,
         isOptedIn: isOptedIn,
@@ -93,7 +93,7 @@ define(function (require, exports, module) {
         // preferencesURL is only available if the user is already
         // registered with basket.
         preferencesUrl: Xss.href(emailPrefs.get('preferencesUrl'))
-      };
+      });
     },
 
     submit: function () {

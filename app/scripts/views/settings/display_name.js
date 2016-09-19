@@ -24,10 +24,8 @@ define(function (require, exports, module) {
       this.render();
     },
 
-    context: function () {
-      return {
-        displayName: this._displayName
-      };
+    updateContext (context) {
+      context.set('displayName', this._displayName);
     },
 
     beforeRender: function () {

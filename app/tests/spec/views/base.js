@@ -804,19 +804,19 @@ define(function (require, exports, module) {
     });
 
     describe('context call cache', function () {
-      it('multiple calls to `getContext` only call `context` once', function () {
+      it('multiple calls to `getContext` only call `updateContext` once', function () {
         view._context = null;
 
-        sinon.spy(view, 'context');
+        sinon.spy(view, 'updateContext');
 
         view.getContext();
         view.getContext();
 
-        assert.equal(view.context.callCount, 1);
+        assert.equal(view.updateContext.callCount, 1);
       });
 
       it('the context cache is cleared each time `render` is called', function () {
-        sinon.spy(view, 'context');
+        sinon.spy(view, 'updateContext');
 
         return view.render()
           .then(function () {
@@ -826,7 +826,7 @@ define(function (require, exports, module) {
             return view.render();
           })
           .then(function () {
-            assert.equal(view.context.callCount, 3);
+            assert.equal(view.updateContext.callCount, 3);
           });
       });
     });
