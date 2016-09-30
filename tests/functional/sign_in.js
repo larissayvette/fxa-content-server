@@ -183,7 +183,7 @@ define([
     },
 
     'data-flow-begin attribute is set': function () {
-      return this.remote
+      this.remote
         .then(testAttributeMatches('body', 'data-flow-begin', /^[1-9][0-9]{13,}$/));
     }
   });
